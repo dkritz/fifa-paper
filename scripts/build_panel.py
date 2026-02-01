@@ -62,6 +62,7 @@ COUNTRY_REMAP = {
     "USA": "United States",
     "Venezuela": "Venezuela, RB",
     "Yemen": "Yemen, Rep.",
+    "Faroe Islands": None,
 }
 
 
@@ -70,7 +71,8 @@ def load_fifa():
     fifa = fifa.rename(columns={"fps": "fifa_points"})
     fifa["year"] = fifa["year"].astype(int) + 1992
     fifa = fifa[fifa["year"].isin(YEARS)]
-    fifa["country_wdi"] = fifa["country"].map(COUNTRY_REMAP).fillna(fifa["country"])
+    mapped = fifa["country"].map(COUNTRY_REMAP)
+    fifa["country_wdi"] = mapped.where(mapped.notna(), fifa["country"])
     return fifa
 
 
@@ -132,6 +134,7 @@ def main():
     fifa = load_fifa()
     name_to_code = load_country_map()
     fifa["country_code"] = fifa["country_wdi"].map(name_to_code)
+    fifa = fifa[fifa["country_wdi"].ne("Faroe Islands")]
 
     wdi = load_wdi()
     club_long, confed = load_club()
