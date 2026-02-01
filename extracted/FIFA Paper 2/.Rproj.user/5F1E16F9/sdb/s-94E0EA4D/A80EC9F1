@@ -1,0 +1,21 @@
+{
+    "contents" : "",
+    "created" : 1332226642112.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A80EC9F1",
+    "lastKnownWriteTime" : 4315491720,
+    "path" : null,
+    "properties" : {
+        "contentUrl" : "content?title=Data%3A+FIFA_WDI_Trad_LONG_2.18&file=43c6f8f2687045b98af2307846eb5f86.htm",
+        "displayedObservations" : "1000",
+        "displayedVariables" : 58,
+        "title" : "Data: FIFA_WDI_Trad_LONG_2.18",
+        "totalObservations" : "3800",
+        "variables" : "58"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

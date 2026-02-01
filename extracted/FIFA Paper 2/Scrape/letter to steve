@@ -1,0 +1,31 @@
+Hey Steve,
+
+Here is the website that has aggregated European international match histories:
+
+http://eu-football.info/
+
+Each country has an id, and each page of matches is identified by its page number.
+
+You can get the complete set of matches for each of 55 UEFA countries.
+
+Each country has its own number of matches, owing mostly to the fact that England goes back to 1872, Austria to 1903, but then Montenegro played its first match in March 2007.
+
+Each country has an id. Austria's id = 12.
+
+Here's the first page of their matches, following a link: http://eu-football.info/_matches.php?id=12
+
+and here is page 2: http://eu-football.info/_matches.php?id=12&page=2
+
+However the number of pages for a country will be variable -- Austria has 18, going back to the year 1903, but England goes back to 1872, and then countries like Montenegro goes back 2007. The links to the first 3 and the final pages are at the bottom of each page, however, so maybe you can scrape that and just know how many pages you need...
+
+Anyway, here's what the data should look like, in any TSV, CSV, or even XLS form:
+
+Date, City, Home, Visiting, Home Score, Visiting Score, Status
+03.10.1915, Vienna, Austria, Hungary, 4, 2, Friendly
+07.11.1915, Budapest, Hungary, Austria, 6, 2, Friendly
+
+and so on...
+
+The Date field could be in any format.
+
+Dave Kritzberg

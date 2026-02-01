@@ -1,0 +1,124 @@
+a:link{text-decoration:none;font-size:11px;color:navy}
+a:visited{text-decoration:none;font-size:11px;color:navy}
+a:hover{text-decoration:none;font-size:11px;color:red}
+a.desc:link{text-decoration:none;font-size:11px;color:navy}
+a.desc:visited{text-decoration:none;font-size:11px;color:navy}
+a.desc:hover{text-decoration:none;font-size:11px;color:red}
+a.menu:link{text-decoration:none;font-size:11px;color:navy}
+a.menu:visited{text-decoration:none;font-size:11px;color:navy}
+a.menu:hover{text-decoration:none;font-size:11px;color:red}
+body{font-family:Verdana, Helvetica, Helv; font-size:11px; }
+img { border-color: black;}
+table{font-family:"Verdana";font-size:11px}
+A.clSlideLinks{font-family:Verdana, Helvetica, Helv; font-size:11px; font-weight:bold; text-weight:bold; color:white}
+p{margin-top:4; margin-bottom:1;}
+        pre 
+        {           
+      white-space: pre;         /* CSS2 */
+      white-space: pre-wrap; /* CSS 2.1 */
+      white-space: pre-line;   /* CSS 2.1/3 */
+      white-space: -moz-pre-wrap; /* Mozilla */
+      white-space: -hp-pre-wrap;   /* HP printers */
+      white-space: -o-pre-wrap;     /* Opera 7 */
+      white-space: -pre-wrap;       /* Opera 4-6 */
+      word-wrap: break-word;       /* Только для динозавра IE */
+        } 
+textarea{width: 400px;}
+input{width: 400px;}
+
+
+
+td.one {background: url(images/flags.png) left top no-repeat;}
+
+td.sprite-004_1{ background-position: 0 0; width: 22px; height: 14px; } 
+td.sprite-004_2{ background-position: 0 -64px; width: 22px; height: 14px; } 
+td.sprite-005_1{ background-position: 0 -128px; width: 22px; height: 14px; } 
+td.sprite-009_1{ background-position: 0 -192px; width: 22px; height: 14px; } 
+td.sprite-012_1{ background-position: 0 -256px; width: 22px; height: 14px; } 
+td.sprite-012_2{ background-position: 0 -320px; width: 22px; height: 14px; } 
+td.sprite-015_1{ background-position: 0 -384px; width: 22px; height: 14px; } 
+td.sprite-021_1{ background-position: 0 -448px; width: 22px; height: 14px; } 
+td.sprite-026_1{ background-position: 0 -512px; width: 22px; height: 14px; } 
+td.sprite-026_2{ background-position: 0 -576px; width: 22px; height: 14px; } 
+td.sprite-032_1{ background-position: 0 -640px; width: 23px; height: 14px; } 
+td.sprite-032_2{ background-position: 0 -704px; width: 23px; height: 14px; } 
+td.sprite-036_1{ background-position: 0 -768px; width: 22px; height: 14px; } 
+td.sprite-036_2{ background-position: 0 -832px; width: 22px; height: 14px; } 
+td.sprite-047_1{ background-position: 0 -896px; width: 22px; height: 14px; } 
+td.sprite-047_2{ background-position: 0 -960px; width: 22px; height: 14px; } 
+td.sprite-047_3{ background-position: 0 -1024px; width: 22px; height: 14px; } 
+td.sprite-047_4{ background-position: 0 -1088px; width: 22px; height: 14px; } 
+td.sprite-049_1{ background-position: 0 -1152px; width: 22px; height: 14px; } 
+td.sprite-056_1{ background-position: 0 -1216px; width: 18px; height: 14px; } 
+td.sprite-060_1{ background-position: 0 -1280px; width: 22px; height: 14px; } 
+td.sprite-070_1{ background-position: 0 -1344px; width: 23px; height: 14px; } 
+td.sprite-073_1{ background-position: 0 -1408px; width: 22px; height: 14px; } 
+td.sprite-082_1{ background-position: 0 -1472px; width: 22px; height: 14px; } 
+td.sprite-085_1{ background-position: 0 -1536px; width: 22px; height: 14px; } 
+td.sprite-085_2{ background-position: 0 -1600px; width: 22px; height: 14px; } 
+td.sprite-085_3{ background-position: 0 -1664px; width: 22px; height: 14px; } 
+td.sprite-086_1{ background-position: 0 -1728px; width: 22px; height: 14px; } 
+td.sprite-086_2{ background-position: 0 -1792px; width: 22px; height: 14px; } 
+td.sprite-086_3{ background-position: 0 -1856px; width: 22px; height: 14px; } 
+td.sprite-095_1{ background-position: 0 -1920px; width: 22px; height: 14px; } 
+td.sprite-095_2{ background-position: -73px 0; width: 22px; height: 14px; } 
+td.sprite-100_1{ background-position: -73px -64px; width: 22px; height: 14px; } 
+td.sprite-100_2{ background-position: -73px -128px; width: 22px; height: 14px; } 
+td.sprite-100_3{ background-position: -73px -192px; width: 22px; height: 14px; } 
+td.sprite-100_4{ background-position: -73px -256px; width: 22px; height: 14px; } 
+td.sprite-100_5{ background-position: -73px -320px; width: 22px; height: 14px; } 
+td.sprite-100_6{ background-position: -73px -384px; width: 22px; height: 14px; } 
+td.sprite-103_1{ background-position: -73px -448px; width: 22px; height: 14px; } 
+td.sprite-111_1{ background-position: -73px -512px; width: 22px; height: 14px; } 
+td.sprite-111_2{ background-position: -73px -576px; width: 22px; height: 14px; } 
+td.sprite-120_1{ background-position: -73px -640px; width: 22px; height: 14px; } 
+td.sprite-120_2{ background-position: -73px -704px; width: 22px; height: 14px; } 
+td.sprite-123_1{ background-position: -73px -768px; width: 22px; height: 14px; } 
+td.sprite-126_1{ background-position: -73px -832px; width: 22px; height: 14px; } 
+td.sprite-129_1{ background-position: -73px -896px; width: 22px; height: 14px; } 
+td.sprite-130_1{ background-position: -73px -960px; width: 21px; height: 14px; } 
+td.sprite-136_1{ background-position: -73px -1024px; width: 22px; height: 14px; } 
+td.sprite-138_1{ background-position: -73px -1088px; width: 22px; height: 14px; } 
+td.sprite-148_1{ background-position: -73px -1152px; width: 22px; height: 14px; } 
+td.sprite-149_1{ background-position: -73px -1216px; width: 22px; height: 14px; } 
+td.sprite-156_1{ background-position: -73px -1280px; width: 22px; height: 14px; } 
+td.sprite-159_1{ background-position: -73px -1344px; width: 21px; height: 14px; } 
+td.sprite-163_1{ background-position: -73px -1408px; width: 22px; height: 14px; } 
+td.sprite-165_1{ background-position: -73px -1472px; width: 22px; height: 14px; } 
+td.sprite-165_2{ background-position: -73px -1536px; width: 22px; height: 14px; } 
+td.sprite-171_1{ background-position: -73px -1600px; width: 22px; height: 14px; } 
+td.sprite-173_1{ background-position: -73px -1664px; width: 22px; height: 14px; } 
+td.sprite-175_1{ background-position: -73px -1728px; width: 22px; height: 14px; } 
+td.sprite-175_2{ background-position: -73px -1792px; width: 22px; height: 14px; } 
+td.sprite-180_1{ background-position: -73px -1856px; width: 22px; height: 14px; } 
+td.sprite-180_2{ background-position: -73px -1920px; width: 22px; height: 14px; } 
+td.sprite-181_1{ background-position: -146px 0; width: 22px; height: 14px; } 
+td.sprite-185_1{ background-position: -146px -64px; width: 22px; height: 14px; } 
+td.sprite-185_2{ background-position: -146px -128px; width: 22px; height: 14px; } 
+td.sprite-185_3{ background-position: -146px -192px; width: 22px; height: 14px; } 
+td.sprite-185_4{ background-position: -146px -256px; width: 22px; height: 14px; } 
+td.sprite-185_5{ background-position: -146px -320px; width: 22px; height: 14px; } 
+td.sprite-191_1{ background-position: -146px -384px; width: 22px; height: 14px; } 
+td.sprite-194_1{ background-position: -146px -448px; width: 14px; height: 14px; } 
+td.sprite-203_1{ background-position: -146px -512px; width: 22px; height: 14px; } 
+td.sprite-210_1{ background-position: -146px -576px; width: 22px; height: 14px; } 
+td.sprite-210_2{ background-position: -146px -640px; width: 22px; height: 14px; } 
+td.sprite-218_1{ background-position: -146px -704px; width: 22px; height: 14px; } 
+td.sprite-222_1{ background-position: -146px -768px; width: 22px; height: 14px; } 
+td.sprite-222_2{ background-position: -146px -832px; width: 22px; height: 14px; } 
+td.sprite-222_3{ background-position: -146px -896px; width: 22px; height: 14px; } 
+td.sprite-231_1{ background-position: -146px -960px; width: 22px; height: 14px; } 
+td.sprite-234_1{ background-position: -146px -1024px; width: 22px; height: 14px; } 
+td.sprite-236_1{ background-position: -146px -1088px; width: 22px; height: 14px; } 
+td.sprite-236_2{ background-position: -146px -1152px; width: 22px; height: 14px; } 
+td.sprite-242_1{ background-position: -146px -1216px; width: 22px; height: 14px; } 
+td.sprite-251_1{ background-position: -146px -1280px; width: 22px; height: 14px; } 
+td.sprite-251_2{ background-position: -146px -1344px; width: 22px; height: 14px; } 
+td.sprite-251_3{ background-position: -146px -1408px; width: 22px; height: 14px; } 
+td.sprite-251_4{ background-position: -146px -1472px; width: 22px; height: 14px; } 
+td.sprite-254_1{ background-position: -146px -1536px; width: 22px; height: 14px; } 
+td.sprite-265_1{ background-position: -146px -1600px; width: 22px; height: 14px; } 
+td.sprite-140_1{ background-position: -146px -1664px; width: 22px; height: 14px; } 
+td.sprite-222_4{ background-position: -146px -1728px; width: 22px; height: 14px; } 
+
+h1{text-decoration:none;font-size:11px;color:white;margin: 0; padding: 0;}

@@ -1,0 +1,41 @@
+Michael and Narek,
+
+About the simulations!
+
+My idea was to take a short-cut approach to predicting the odds that each team would win by performing a crude form of simulation using our model (Model 3). 
+
+The approach would be like this (I've done part of it already in R):
+
+1. Using the coefficient estimates of the model as the mean of a normal random variable, and the Z scores we report as the standard deviation, create a set of 
+draws for each variable, then apply them to each team's most recent characteristics in our panel data set to calculate FPS. We now have one draw, same for each team, and we have 16 FPS, one for each team.
+
+2. Now pull out the team with the highest FPS. This team is the winner of this round.
+
+3. Do this X times. Keep track of how often each team is the winner.
+
+4. If things go well, each team wins at least one round. Increase X to get a smoother result.
+
+5. The fraction of rounds won is that team's odds of winning the tournament.
+
+6. Then use betting math to create betting odds if we prefer them (e.g. 30 to 1 instead of 1/32 or whatever -- I don't even know how to do this!)
+
+Possible improvements: 
+
+A. Every team gets its own draw, every round. Just more number crunching -- 16 times more, a little more code, maybe it describes the reality of our model better.
+
+B. [Still thinking...]
+
+C. Narek had the idea to simulate the entire tournament. This is substantially cooler and more involved:
+
+1. For each match, use our model to predict the game result with random draws of each team's strength.
+
+2. Create statistical criteria for win, tie, loss for first team in the pair.
+
+3. There would need to be logic for pairing up teams according to the groupings, tiebreakers -- but we don't calculate goals scored!
+
+4. Then there would need to be more logic for advancing teams and matching them by ranking in the group stage through the elimination rounds. 
+
+5. This would be a cool program to write, and I should be able to do it, but I'm not sure how long it would take me. 
+
+
+ 
