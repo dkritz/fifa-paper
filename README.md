@@ -8,6 +8,20 @@ Replicate the paper's econometric results in Python with Stata 8/9-compatible
 defaults (fixed-effects OLS for equations (1)-(2), fixed-effects IV/2SLS for
 equation (3)), and write comparable result tables to `results/`.
 
+## Notebook (new feature)
+Create a repository-visible Python notebook that documents the current
+replication status and runs on synthetic data. The notebook should live at
+`notebooks/replication_status.ipynb` so it renders on GitHub.
+
+Notebook contents (initial scope):
+1) Project goal and replication status summary.
+2) Synthetic panel data generator (schema matches `data/analysis/panel.csv`).
+3) Run equations (1)-(3) on synthetic data using the same code paths as
+   `scripts/replicate_stata.py`.
+4) Write outputs to a local `results/` subfolder in the notebook runtime.
+5) Include placeholders/sections for future: real data ingest, Stata comparison,
+   table export formatting, and validation checks.
+
 ## Quick start
 1) Create a virtual environment and install dependencies:
 
@@ -71,6 +85,8 @@ If `confed` is present, the script also writes confederation splits as
   instrument for `club`.
 
 ## Dev checklist
-1) Complete `docs/data-dictionary.md` with variable sources, units, and construction rules.
-2) Confirm the exact Stata version (8 vs 9) used in the original analysis.
-3) Run the replication script and verify outputs appear in `results/`.
+1) Build the initial notebook at `notebooks/replication_status.ipynb` per the
+   Notebook section above.
+2) Complete `docs/data-dictionary.md` with variable sources, units, and construction rules.
+3) Confirm the exact Stata version (8 vs 9) used in the original analysis.
+4) Run the replication script and verify outputs appear in `results/`.
