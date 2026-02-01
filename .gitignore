@@ -1,0 +1,15 @@
+.DS_Store
+.Rhistory
+.Rproj.user/
+*.log
+*.aux
+*.out
+*.synctex.gz
+*.tmp
+*.swp
+*.swo
+*.bak
+*.orig
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
