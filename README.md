@@ -90,3 +90,8 @@ If `confed` is present, the script also writes confederation splits as
 2) Complete `docs/data-dictionary.md` with variable sources, units, and construction rules.
 3) Confirm the exact Stata version (8 vs 9) used in the original analysis.
 4) Run the replication script and verify outputs appear in `results/`.
+
+## Docs
+- `docs/data-dictionary.md`
+- `docs/notebook-spec.md`
+- `docs/research-questions.md`
