@@ -8,18 +8,21 @@ Assumptions:
 Outputs are printed to stdout and optionally saved to CSV.
 """
 
-from __future__ import annotations
-
 import argparse
-from pathlib import Path
+import os
+import sys
 
-import numpy as np
+
+if sys.version_info < (3, 8):
+    sys.stderr.write("Python 3.8+ is required. Run: python3 scripts/replicate_stata.py\n")
+    sys.exit(1)
+
 import pandas as pd
 from linearmodels.panel import PanelOLS
 from linearmodels.iv import IV2SLS
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--data",
@@ -49,7 +52,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def two_way_demean(df: pd.DataFrame, cols: list[str], entity: str, time: str) -> pd.DataFrame:
+def two_way_demean(df, cols, entity, time):
     """Two-way demean columns by entity and time (within estimator)."""
     out = df.copy()
     for col in cols:
@@ -60,49 +63,83 @@ def two_way_demean(df: pd.DataFrame, cols: list[str], entity: str, time: str) ->
     return out
 
 
-def fit_fe_ols(panel: pd.DataFrame, dep: str, exog: list[str]) -> PanelOLS:
+def _drop_absorbed(panel, exog):
+    names = list(panel.index.names)
+    if len(names) < 2 or names[0] is None or names[1] is None:
+        return exog, []
+
+    entity, time = names[0], names[1]
+    work = panel.reset_index()
+    demeaned = two_way_demean(work, exog, entity, time)
+    dropped = []
+    keep = []
+    for col in exog:
+        if demeaned[col].var() <= 1e-12:
+            dropped.append(col)
+        else:
+            keep.append(col)
+    return keep, dropped
+
+
+def fit_fe_ols(panel, dep, exog):
+    keep, dropped = _drop_absorbed(panel, exog)
+    if dropped:
+        print("Dropped absorbed variables: {0}".format(", ".join(dropped)))
+    if not keep:
+        raise ValueError("All regressors absorbed by fixed effects.")
+
     y = panel[dep]
-    X = panel[exog]
+    X = panel[keep]
     model = PanelOLS(y, X, entity_effects=True, time_effects=True)
-    res = model.fit(cov_type="clustered", cluster_entity=True, debiased=True)
+    res = model.fit(
+        cov_type="clustered",
+        cluster_entity=True,
+        debiased=True,
+    )
     return res
 
 
-def fit_fe_iv(
-    df: pd.DataFrame,
-    dep: str,
-    exog: list[str],
-    endog: str,
-    instr: list[str],
-    entity: str,
-    time: str,
-) -> IV2SLS:
+def fit_fe_iv(df, dep, exog, endog, instr, entity, time):
     cols = [dep] + exog + [endog] + instr + [entity, time]
     work = df[cols].dropna().copy()
     work = two_way_demean(work, [dep] + exog + [endog] + instr, entity, time)
 
     y = work[dep]
-    X = work[exog]
+    keep_exog = [c for c in exog if work[c].var() > 1e-12]
+    if not keep_exog:
+        raise ValueError("All exogenous regressors absorbed by fixed effects.")
+
     endog_v = work[endog]
-    Z = work[instr]
+    if endog_v.var() <= 1e-12:
+        raise ValueError("Endogenous regressor absorbed by fixed effects.")
+
+    keep_instr = [c for c in instr if work[c].var() > 1e-12]
+    if not keep_instr:
+        raise ValueError("All instruments absorbed by fixed effects.")
+
+    X = work[keep_exog]
+    Z = work[keep_instr]
 
     model = IV2SLS(y, X, endog_v, Z)
     res = model.fit(cov_type="clustered", clusters=work[entity], debiased=True)
     return res
 
 
-def save_summary(res, out_path: Path) -> None:
-    out_path.parent.mkdir(parents=True, exist_ok=True)
+def save_summary(res, out_path):
+    out_dir = os.path.dirname(out_path)
+    if out_dir and not os.path.exists(out_dir):
+        os.makedirs(out_dir)
     table = res.summary.tables[1].as_csv()
-    out_path.write_text(table)
+    with open(out_path, "w") as handle:
+        handle.write(table)
 
 
-def main() -> None:
+def main():
     args = parse_args()
 
-    data_path = Path(args.data)
-    if not data_path.exists():
-        raise FileNotFoundError(f"Data file not found: {data_path}")
+    data_path = args.data
+    if not os.path.exists(data_path):
+        raise FileNotFoundError("Data file not found: {0}".format(data_path))
 
     df = pd.read_csv(data_path)
 
@@ -115,30 +152,30 @@ def main() -> None:
     required = [args.entity, args.time, dep] + base + macro + [club] + instr
     missing = [c for c in required if c not in df.columns]
     if missing:
-        raise ValueError(f"Missing required columns: {missing}")
+        raise ValueError("Missing required columns: {0}".format(missing))
 
     df = df.sort_values([args.entity, args.time])
     panel = df.set_index([args.entity, args.time])
 
-    output_dir = Path(args.output)
+    output_dir = args.output
 
     # Equation (1)
     res1 = fit_fe_ols(panel, dep, base)
     print("\nEquation (1) - Full sample")
     print(res1.summary)
-    save_summary(res1, output_dir / "eq1_full.csv")
+    save_summary(res1, os.path.join(output_dir, "eq1_full.csv"))
 
     # Equation (2)
     res2 = fit_fe_ols(panel, dep, base + macro)
     print("\nEquation (2) - Full sample")
     print(res2.summary)
-    save_summary(res2, output_dir / "eq2_full.csv")
+    save_summary(res2, os.path.join(output_dir, "eq2_full.csv"))
 
     # Equation (3) - IV with fixed effects
     res3 = fit_fe_iv(df, dep, base + macro, club, instr, args.entity, args.time)
     print("\nEquation (3) - Full sample")
     print(res3.summary)
-    save_summary(res3, output_dir / "eq3_full.csv")
+    save_summary(res3, os.path.join(output_dir, "eq3_full.csv"))
 
     # By confederation
     if args.confed in df.columns:
@@ -150,13 +187,13 @@ def main() -> None:
 
             try:
                 res1c = fit_fe_ols(panel_sub, dep, base)
-                save_summary(res1c, output_dir / f"eq1_{confed}.csv")
+                save_summary(res1c, os.path.join(output_dir, "eq1_{0}.csv".format(confed)))
             except Exception:
                 pass
 
             try:
                 res2c = fit_fe_ols(panel_sub, dep, base + macro)
-                save_summary(res2c, output_dir / f"eq2_{confed}.csv")
+                save_summary(res2c, os.path.join(output_dir, "eq2_{0}.csv".format(confed)))
             except Exception:
                 pass
 
@@ -164,7 +201,7 @@ def main() -> None:
             if confed.upper() == "UEFA":
                 try:
                     res3c = fit_fe_iv(subset, dep, base + macro, club, instr, args.entity, args.time)
-                    save_summary(res3c, output_dir / f"eq3_{confed}.csv")
+                    save_summary(res3c, os.path.join(output_dir, "eq3_{0}.csv".format(confed)))
                 except Exception:
                     pass
 
