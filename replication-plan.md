@@ -21,14 +21,20 @@ Recreate Stata results in Python as faithfully as possible before any refactorin
 - Regressions were run in Stata 8 or 9 using xtivreg and xtivreg2 (panel IV estimators).
 - Replication should prioritize matching Stata 8/9 defaults (e.g., FE handling, variance estimators, and small-sample adjustments).
 
+## Scope clarification (no do files)
+Because the original do files are missing, the plan below focuses on
+reconstructing the workflow from the paper, available data, and Stata 8/9
+defaults rather than translating an existing script.
+
 ## Plan
 1) Collect and catalog inputs
-- Identify all Stata do files, ado dependencies, raw data files, and intermediate outputs.
+- Identify raw data files, intermediate outputs (if any), and any custom ado dependencies used in related work.
 - Note exact Stata version used in the paper (affects defaults and numeric behavior).
 - Confirm OS and file encodings (some Stata workflows assume Windows-style paths).
+- Fill out `docs/data-dictionary.md` with sources, units, and construction rules for each variable.
 
 2) Build a dependency map
-- Parse each do file’s flow: data import, cleaning, merges, derived variables, regressions, tables/figures.
+- Reconstruct the data flow: import, cleaning, merges, derived variables, regressions, tables/figures.
 - Record dataset lineage and intermediates.
 - Identify Stata-specific behaviors needing explicit Python handling (for example, missing values, weights, robust SE defaults, factor variables, xtset/panel commands).
 
@@ -64,3 +70,8 @@ Recreate Stata results in Python as faithfully as possible before any refactorin
 3) Any custom ado files and their locations
 4) Rough dataset sizes (row counts or file sizes)
 5) Preference on table and figure formatting: exact match or numeric equality only
+
+## Immediate next steps for devs
+1) Complete `docs/data-dictionary.md` so variable definitions are unambiguous.
+2) Confirm the exact Stata version (8 vs 9) used in the paper or related runs.
+3) Run the replication script on the prepared panel and verify output files in `results/`.
