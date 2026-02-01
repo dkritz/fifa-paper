@@ -127,7 +127,8 @@ def load_club():
     )
     confed["confed"] = confed["conf_code"].map(CONFED_MAP)
     club_long = club_long.rename(columns={"CODE": "country_code"})
-    return club_long, confed[["country_code", "confed"]]
+    name_to_fifa = club[["TEAM", "CODE"]].dropna().drop_duplicates()
+    return club_long, confed[["country_code", "confed"]], name_to_fifa
 
 
 def main():
@@ -137,7 +138,9 @@ def main():
     fifa = fifa[fifa["country_wdi"].ne("Faroe Islands")]
 
     wdi = load_wdi()
-    club_long, confed = load_club()
+    club_long, confed, name_to_fifa = load_club()
+    fifa = fifa.merge(name_to_fifa, how="left", left_on="country", right_on="TEAM")
+    fifa = fifa.rename(columns={"CODE": "fifa_code"})
 
     panel = fifa.merge(
         wdi,
@@ -148,9 +151,15 @@ def main():
     panel = panel.merge(
         club_long[["country_code", "year", "club"]],
         how="left",
-        on=["country_code", "year"],
+        left_on=["fifa_code", "year"],
+        right_on=["country_code", "year"],
     )
-    panel = panel.merge(confed, how="left", on="country_code")
+    panel = panel.merge(
+        confed,
+        how="left",
+        left_on="fifa_code",
+        right_on="country_code",
+    )
 
     # Fill from FIFA data where WDI missing
     if "gdppercapitacurrentus" in panel.columns:
