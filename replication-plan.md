@@ -3,6 +3,24 @@
 ## Goal
 Recreate Stata results in Python as faithfully as possible before any refactoring.
 
+## Econometric specification (from paper)
+- Panel fixed-effects (country and time), annual data 1993–2010.
+- Dependent variable: FIFA points.
+- Equation (1): baseline wealth and population with quadratic terms.
+  - FIFA = f(GDP, GDP^2, POP, POP^2)
+- Equation (2): adds macro/resource controls.
+  - FIFA = f(GDP, GDP^2, POP, POP^2, TRADE, INFL, OIL, LEB)
+- Equation (3): adds domestic club strength (CLUB), treated as endogenous.
+  - FIFA = f(GDP, GDP^2, POP, POP^2, TRADE, INFL, OIL, LEB, CLUB)
+  - First stage: CLUB = g(GDP, GDP^2, POP, POP^2, TRADE, INFL, OIL, LEB, UrbPOP, UrbPOP^2)
+  - Instrument: urban population share (UrbPOP) and squared term.
+- Estimation: FE OLS with cluster-robust SE for (1) and (2); IV/2SLS with HAC/cluster-robust SE for (3), using xtivreg2.
+
+## Constraints and assumptions
+- Original Stata do files are not available; we must infer workflow from the paper and data files.
+- Regressions were run in Stata 8 or 9 using xtivreg and xtivreg2 (panel IV estimators).
+- Replication should prioritize matching Stata 8/9 defaults (e.g., FE handling, variance estimators, and small-sample adjustments).
+
 ## Plan
 1) Collect and catalog inputs
 - Identify all Stata do files, ado dependencies, raw data files, and intermediate outputs.

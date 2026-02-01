@@ -2,3 +2,4 @@ FIFA[[:space:]]Paper[[:space:]]2-20260201T005040Z-3-001.zip filter=lfs diff=lfs 
 extracted/FIFA[[:space:]]Paper[[:space:]]2/Data/wdi_and_gdf_csv/wdi_gdf_data.csv filter=lfs diff=lfs merge=lfs -text
 archived/FIFA[[:space:]]Paper[[:space:]]2-20260201T005040Z-3-001.zip filter=lfs diff=lfs merge=lfs -text
 archived/extracted/FIFA[[:space:]]Paper[[:space:]]2/Data/wdi_and_gdf_csv/wdi_gdf_data.csv filter=lfs diff=lfs merge=lfs -text
+data/wdi_and_gdf_csv/wdi_gdf_data.csv filter=lfs diff=lfs merge=lfs -text
