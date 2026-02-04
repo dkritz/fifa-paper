@@ -249,7 +249,7 @@ python3 scripts/replicate_stata.py --data data/analysis/panel.csv
 
 ## Known Limitations
 
-1. **Club data availability**: Only 2000-2010, earlier years set to 0/null
+1. **Club data availability**: Only 2000-2010, earlier years are null
 2. **Country coverage**: Limited to countries with both FIFA and WDI data
 3. **Temporal alignment**: WDI annual data may not align perfectly with FIFA ranking dates
 4. **GDP measurement**: Current US$ (not PPP), subject to exchange rate fluctuations
