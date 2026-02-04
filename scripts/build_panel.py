@@ -66,13 +66,39 @@ COUNTRY_REMAP = {
 }
 
 
+def _clean_country(value):
+    if pd.isna(value):
+        return value
+    return str(value).strip()
+
+
+def _coerce_numeric(df, columns):
+    for col in columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    return df
+
+
 def load_fifa():
     fifa = pd.read_csv(FIFA_PATH)
     fifa = fifa.rename(columns={"fps": "fifa_points"})
+    fifa["country"] = fifa["country"].map(_clean_country)
     fifa["year"] = fifa["year"].astype(int) + 1992
     fifa = fifa[fifa["year"].isin(YEARS)]
     mapped = fifa["country"].map(COUNTRY_REMAP)
     fifa["country_wdi"] = mapped.where(mapped.notna(), fifa["country"])
+    fifa = _coerce_numeric(
+        fifa,
+        [
+            "fifa_points",
+            "gdpgrowthannual",
+            "gdppercapitacurrentus",
+            "tradeofgdp",
+            "inflation",
+            "healthexpenditurepercapitacurren",
+            "lifeexpect",
+        ],
+    )
     return fifa
 
 
@@ -95,6 +121,7 @@ def load_wdi():
         value_name="value",
     )
     wdi["year"] = wdi["year"].astype(int)
+    wdi["value"] = pd.to_numeric(wdi["value"], errors="coerce")
     wdi["variable"] = wdi["Series Code"].map(WDI_CODES)
     wdi = (
         wdi.pivot_table(
@@ -110,6 +137,7 @@ def load_wdi():
 
 def load_club():
     club = pd.read_csv(CLUB_PATH)
+    club["TEAM"] = club["TEAM"].map(_clean_country)
     club_cols = [c for c in club.columns if c.startswith("CLUB")]
     club_long = club.melt(
         id_vars=["TEAM", "CODE", "CONF-Code"],
@@ -119,6 +147,7 @@ def load_club():
     )
     club_long["year"] = club_long["year"].str.replace("CLUB", "", regex=False).astype(int)
     club_long = club_long[club_long["year"].isin(YEARS)]
+    club_long["club"] = pd.to_numeric(club_long["club"], errors="coerce")
     confed = (
         club[["CODE", "CONF-Code"]]
         .dropna()
@@ -161,6 +190,15 @@ def main():
         right_on="country_code",
     )
 
+    if panel.duplicated(subset=["country", "year"]).any():
+        dupes = panel[panel.duplicated(subset=["country", "year"], keep=False)]
+        raise ValueError(
+            "Duplicate country-year rows detected after merge. "
+            "Check source data for duplicates. Sample: {0}".format(
+                dupes[["country", "year"]].head(5).to_dict(orient="records")
+            )
+        )
+
     # Fill from FIFA data where WDI missing
     if "gdppercapitacurrentus" in panel.columns:
         panel["gdp_pc"] = panel["gdp_pc"].fillna(panel["gdppercapitacurrentus"])
@@ -170,6 +208,21 @@ def main():
         panel["infl"] = panel["infl"].fillna(panel["inflation"])
     if "lifeexpect" in panel.columns:
         panel["leb"] = panel["leb"].fillna(panel["lifeexpect"])
+
+    panel = _coerce_numeric(
+        panel,
+        [
+            "fifa_points",
+            "gdp_pc",
+            "pop",
+            "trade",
+            "infl",
+            "oil",
+            "leb",
+            "club",
+            "urbpop",
+        ],
+    )
 
     panel["gdp_pc_sq"] = panel["gdp_pc"] ** 2
     panel["pop_sq"] = panel["pop"] ** 2
