@@ -65,8 +65,8 @@ The FIFA points file also contains supplementary economic data used as fallback:
 | country | Country name (standardized) | text | FIFA points file | Mapped to WDI naming conventions | 150+ countries |
 | year | Calendar year | year | Derived | Original year codes (1-18) + 1992 | 1993–2010 |
 | confed | Football confederation | code | Club rankings | 1=UEFA, 2=CONMEBOL, 3=CONCACAF, 4=AFC, 5=CAF, 6=OFC | Based on FIFA codes |
-| fifa_points | FIFA ranking points | points | FIFA points file | As recorded by FIFA | Monthly average or year-end |
-| gdp_pc | GDP per capita | current US$ | WDI (NY.GDP.PCAP.CD) | Fallback: FIFA file gdppercapitacurrentus | PPP or nominal? |
+| fifa_points | FIFA ranking points | points | FIFA points file | As recorded by FIFA | See assumptions on aggregation frequency |
+| gdp_pc | GDP per capita | current US$ | WDI (NY.GDP.PCAP.CD) | Fallback: FIFA file gdppercapitacurrentus | Nominal (current US$), not PPP |
 | gdp_pc_sq | GDP per capita squared | US$^2 | Derived | gdp_pc^2 | Computed after merge |
 | pop | Population | people | WDI (SP.POP.TOTL) | Mid-year estimate | |
 | pop_sq | Population squared | people^2 | Derived | pop^2 | Computed after merge |
@@ -74,7 +74,7 @@ The FIFA points file also contains supplementary economic data used as fallback:
 | infl | Inflation | annual % | WDI (FP.CPI.TOTL.ZG) | Fallback: FIFA file inflation | Consumer price index |
 | oil | Oil rents | % of GDP | WDI (NY.GDP.PETR.RT.ZS) | No fallback | Resource measure |
 | leb | Life expectancy | years | WDI (SP.DYN.LE00.IN) | Fallback: FIFA file lifeexpect | At birth, both sexes |
-| club | Domestic club strength | index | Club rankings file | Sum/average of club rankings by country | FIFA club ranking points |
+| club | Domestic club strength | index | Club rankings file | Sum/average of club rankings by country | Missing pre-2000 (no zero fill) |
 | urbpop | Urban population share | % | WDI (SP.URB.TOTL.IN.ZS) | Instrument for club | % of total population |
 | urbpop_sq | Urban population share squared | %^2 | Derived | urbpop^2 | Computed after merge; instrument |
 
@@ -128,22 +128,26 @@ The following country name mappings were applied to align FIFA names with WDI co
 
 - **Faroe Islands**: Excluded entirely (no WDI data)
 - **Other countries**: Missing WDI values filled from FIFA supplementary data where available
-- **Club data**: Missing values remain as null (0 in early years before 2000)
+- **Club data**: Missing values remain null (no zero fill in pre-2000 years)
 - **Listwise deletion**: Applied in regression models (complete case analysis)
 
 ### Sample Restrictions
 
 - **Years**: 1993–2010 only (FIFA points data availability)
 - **Countries**: Must have FIFA points data
-- **Club data**: Available from 2000 onwards only (earlier years set to 0 or null)
+- **Club data**: Available from 2000 onwards only (earlier years are null)
 
 ## Data Quality Notes
 
 1. **GDP per capita**: Mix of WDI and FIFA source data; some countries may have gaps
-2. **Club strength**: Zero values in 1993-1999 indicate no data, not zero ranking
+2. **Club strength**: Missing values in 1993-1999 indicate no data, not zero ranking
 3. **Confederations**: OFC (Oceania) may have limited observations
 4. **Panel balance**: Unbalanced panel due to country entry/exit from FIFA rankings
 5. **Oil rents**: May be zero for non-oil-producing countries
+
+## Assumptions and open points
+
+- **FIFA points aggregation**: The source file provides a single annual points value per country-year. The exact aggregation method (monthly average vs year-end snapshot) is not documented in the raw file. We treat it as the annual FIFA ranking points for the given year.
 
 ## Usage in Regression Models
 
