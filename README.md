@@ -8,19 +8,30 @@ Replicate the paper's econometric results in Python with Stata 8/9-compatible
 defaults (fixed-effects OLS for equations (1)-(2), fixed-effects IV/2SLS for
 equation (3)), and write comparable result tables to `results/`.
 
-## Notebook (new feature)
-Create a repository-visible Python notebook that documents the current
-replication status and runs on synthetic data. The notebook should live at
-`notebooks/replication_status.ipynb` so it renders on GitHub.
+## Notebooks
 
-Notebook contents (initial scope):
-1) Project goal and replication status summary.
-2) Synthetic panel data generator (schema matches `data/analysis/panel.csv`).
-3) Run equations (1)-(3) on synthetic data using the same code paths as
-   `scripts/replicate_stata.py`.
-4) Write outputs to a local `results/` subfolder in the notebook runtime.
-5) Include placeholders/sections for future: real data ingest, Stata comparison,
-   table export formatting, and validation checks.
+Two notebooks are provided for replication:
+
+### 1. `notebooks/replication_status.ipynb` (Synthetic Data)
+Documents the replication status using **synthetic data** to demonstrate the model
+pipeline without requiring the full dataset. Useful for testing and development.
+
+**Contents**:
+- Project goal and replication status summary
+- Synthetic panel data generator (schema matches `data/analysis/panel.csv`)
+- Equations (1)-(3) on synthetic data using the same code paths as `scripts/replicate_stata.py`
+- Outputs saved to local `results/` subfolder
+
+### 2. `notebooks/replication_actual_data.ipynb` (Actual Data)
+Runs the full replication using the **actual** panel dataset built from FIFA
+rankings, club rankings, and World Development Indicators (1993-2010).
+
+**Contents**:
+- Load and validate the actual panel dataset
+- Run Equations (1)-(3) on real data
+- Confederation-level analysis
+- Export results to CSV
+- Summary statistics and data quality checks
 
 ## Quick start
 1) Create a virtual environment and install dependencies:
@@ -49,7 +60,22 @@ python3 scripts/replicate_stata.py --data data/analysis/panel.csv
 Results will be written to the `results/` folder as CSV summaries.
 
 ## Data inputs
-Provide a panel dataset at `data/analysis/panel.csv` with these columns:
+
+The panel dataset is built from three raw sources. You can either:
+
+**Option A: Build from raw sources**
+```bash
+python3 scripts/build_panel.py
+```
+This creates `data/analysis/panel.csv` by merging:
+- FIFA World Rankings (1993-2010)
+- FIFA Club Rankings (2000-2010)
+- World Bank WDI data (1993-2010)
+
+See [docs/data-pipeline.md](docs/data-pipeline.md) for complete documentation.
+
+**Option B: Provide your own panel**
+Create `data/analysis/panel.csv` with these columns:
 - `country`, `year`, `confed`
 - `fifa_points`
 - `gdp_pc`, `gdp_pc_sq`
@@ -58,13 +84,10 @@ Provide a panel dataset at `data/analysis/panel.csv` with these columns:
 - `club`
 - `urbpop`, `urbpop_sq`
 
-### Data dictionary (required)
-This repo assumes you already have the panel dataset. Please document the
-following in `docs/data-dictionary.md` (template included):
-- Source and coverage for each variable (years, countries, updates).
-- Units and transformations (levels, logs, shares, deflators).
-- Construction details for derived variables (e.g., `*_sq`, `club`).
-- Any filters or exclusions applied before creating the panel.
+### Data documentation
+- [docs/data-dictionary.md](docs/data-dictionary.md): Variable definitions, sources, and transformations
+- [docs/data-pipeline.md](docs/data-pipeline.md): Complete ETL pipeline documentation
+- Country name mappings, WDI series codes, and construction rules are fully documented
 
 ## Expected outputs
 The replication script writes CSV summaries to `results/` with the following
@@ -85,13 +108,18 @@ If `confed` is present, the script also writes confederation splits as
   instrument for `club`.
 
 ## Dev checklist
-1) Build the initial notebook at `notebooks/replication_status.ipynb` per the
-   Notebook section above.
-2) Complete `docs/data-dictionary.md` with variable sources, units, and construction rules.
-3) Confirm the exact Stata version (8 vs 9) used in the original analysis.
-4) Run the replication script and verify outputs appear in `results/`.
+- [x] Build synthetic data notebook at `notebooks/replication_status.ipynb`
+- [x] Build actual data notebook at `notebooks/replication_actual_data.ipynb`
+- [x] Complete `docs/data-dictionary.md` with variable sources, units, and construction rules
+- [x] Create `docs/data-pipeline.md` documenting the ETL workflow
+- [ ] Confirm the exact Stata version (8 vs 9) used in the original analysis
+- [ ] Run validation comparing Python results to original paper/Stata output
+- [ ] Add coefficient comparison tables
+- [ ] Document any discrepancies and their causes
 
 ## Docs
-- `docs/data-dictionary.md`
-- `docs/notebook-spec.md`
-- `docs/research-questions.md`
+- `docs/data-dictionary.md` - Variable definitions and sources
+- `docs/data-pipeline.md` - ETL pipeline documentation
+- `docs/notebook-spec.md` - Notebook structure specification
+- `docs/research-questions.md` - Original and post-publication research questions
+- `docs/architecture-review.md` - Project architecture assessment
