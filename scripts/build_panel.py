@@ -252,6 +252,19 @@ def main():
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     panel.to_csv(OUTPUT_PATH, index=False)
 
+    print("Wrote panel:", OUTPUT_PATH)
+    print("Rows:", len(panel), "Columns:", len(panel.columns))
+    if not panel.empty:
+        print("Year range:", int(panel["year"].min()), "-", int(panel["year"].max()))
+
+    missing_counts = panel[columns].isna().sum().sort_values(ascending=False)
+    missing_nonzero = missing_counts[missing_counts > 0]
+    if not missing_nonzero.empty:
+        print("Missing values (non-zero):")
+        print(missing_nonzero)
+    else:
+        print("Missing values: none")
+
     missing_codes = fifa.loc[fifa["country_code"].isna(), "country"].unique().tolist()
     if missing_codes:
         print("Missing country code mappings:", missing_codes)

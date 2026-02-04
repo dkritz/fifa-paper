@@ -176,6 +176,10 @@ def load_club():
 # Export to data/analysis/panel.csv
 ```
 
+**Runtime summary**:
+- Prints row/column counts and year range
+- Reports missing values by column (non-zero only)
+
 ## Data Quality Controls
 
 ### Country Name Harmonization
