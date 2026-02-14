@@ -16,3 +16,4 @@ __pycache__/
 results/
 .venv/
 fifa-paper-replication-*-session-*.md
+data/analysis/panel.csv

@@ -123,3 +123,4 @@ If `confed` is present, the script also writes confederation splits as
 - `docs/notebook-spec.md` - Notebook structure specification
 - `docs/research-questions.md` - Original and post-publication research questions
 - `docs/architecture-review.md` - Project architecture assessment
+- `docs/econometric-report.md` - Python results summary, diagnostics, and data update plan
