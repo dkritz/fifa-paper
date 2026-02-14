@@ -1,0 +1,110 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{amsmath}
+
+\title{The Triumph of Passion (Version 2): Updated Python Replication}
+\author{Narek Sahakyan, Michael W. Nicholson, and David Kritzberg}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This version updates the econometric results using the current Python replication pipeline and the actual panel dataset (1993--2010). We replicate the baseline fixed-effects models and the instrumental variables specification that links domestic club strength to national team performance. The baseline results confirm positive but diminishing returns to income and population, with trade openness and life expectancy contributing positively to FIFA points. The IV specification is weakly identified in the current dataset, and the club coefficient is imprecisely estimated. We summarize the results, diagnostics, and implications for future data work.
+\end{abstract}
+
+\section{Introduction}
+This paper investigates the relationship between national team performance and domestic club strength. We use annual FIFA points as the outcome and build a panel covering all FIFA countries for 1993--2010. The analysis follows the original specifications but uses the current Python replication pipeline. This version focuses on updated estimates and diagnostics that explain why the IV specification is less precise in the current dataset.
+
+\section{Data}
+The panel combines FIFA points, a domestic club strength index, and World Development Indicators. GDP per capita is expressed in thousands and population in millions for numerical stability; squared terms are computed from these scaled variables. The panel includes 3276 country-year observations for 182 countries from 1993--2010, with missingness in club and macro variables reducing the effective sample size for some models.
+
+\section{Econometric Specifications}
+We estimate three equations of increasing complexity:
+
+\begin{align}
+\text{FIFA}_{it} &= f(\text{GDP}_{it}, \text{GDP}_{it}^2, \text{POP}_{it}, \text{POP}_{it}^2) \quad (1) \\
+\text{FIFA}_{it} &= f(\text{GDP}_{it}, \text{GDP}_{it}^2, \text{POP}_{it}, \text{POP}_{it}^2, \text{TRADE}_{it}, \text{INFL}_{it}, \text{OIL}_{it}, \text{LEB}_{it}) \quad (2) \\
+\text{FIFA}_{it} &= f(\text{GDP}_{it}, \text{GDP}_{it}^2, \text{POP}_{it}, \text{POP}_{it}^2, \text{TRADE}_{it}, \text{INFL}_{it}, \text{OIL}_{it}, \text{LEB}_{it}, \text{CLUB}_{it}) \quad (3)
+\end{align}
+
+Equations (1) and (2) are estimated using country fixed effects and clustered standard errors. Equation (3) treats CLUB as endogenous and instruments it with urban population and its square. The IV estimation uses fixed-effects demeaning and clustered standard errors.
+
+\section{Results}
+
+\subsection{Equation (1): Baseline}
+The baseline model confirms positive but diminishing returns to GDP per capita and population. All coefficients are statistically significant and have the expected signs.
+
+\begin{table}[h]
+\centering
+\caption{Equation (1): Baseline FE Results}
+\begin{tabular}{lrrrr}
+\toprule
+Variable & Coef. & Std. Err. & t-stat & p-value \\
+\midrule
+GDP per capita (thousands) & 35.216 & 4.469 & 7.881 & 0.000 \\
+GDP per capita$^2$ & -0.2108 & 0.0437 & -4.821 & 0.000 \\
+Population (millions) & 24.418 & 4.498 & 5.429 & 0.000 \\
+Population$^2$ & -0.0104 & 0.0022 & -4.738 & 0.000 \\
+\bottomrule
+\end{tabular}
+\label{tab:eq1}
+\end{table}
+
+\subsection{Equation (2): Controls}
+Adding macroeconomic and resource controls preserves the inverted-U relationships for GDP and population. Trade openness and life expectancy are positive and significant. Inflation and oil rents are not statistically significant in the full sample.
+
+\begin{table}[h]
+\centering
+\caption{Equation (2): FE Results with Controls}
+\begin{tabular}{lrrrr}
+\toprule
+Variable & Coef. & Std. Err. & t-stat & p-value \\
+\midrule
+GDP per capita (thousands) & 33.170 & 4.712 & 7.039 & 0.000 \\
+GDP per capita$^2$ & -0.2481 & 0.0356 & -6.973 & 0.000 \\
+Population (millions) & 13.455 & 4.873 & 2.761 & 0.006 \\
+Population$^2$ & -0.0060 & 0.0022 & -2.706 & 0.007 \\
+Trade (\% GDP) & 3.105 & 0.851 & 3.647 & 0.000 \\
+Inflation & -0.0024 & 0.0107 & -0.228 & 0.820 \\
+Oil rents (\% GDP) & 2.909 & 2.222 & 1.309 & 0.191 \\
+Life expectancy & 41.406 & 13.530 & 3.060 & 0.002 \\
+\bottomrule
+\end{tabular}
+\label{tab:eq2}
+\end{table}
+
+\subsection{Equation (3): IV with Club Strength}
+The IV estimates are imprecise and the club coefficient is not statistically significant. Diagnostics indicate weak instrument relevance: the first-stage partial F-statistic is 0.42 and the partial $R^2$ is 0.0003. In this dataset, urbanization does not explain club strength once fixed effects are applied.
+
+\begin{table}[h]
+\centering
+\caption{Equation (3): FE IV Results}
+\begin{tabular}{lrrrr}
+\toprule
+Variable & Coef. & Std. Err. & t-stat & p-value \\
+\midrule
+GDP per capita (thousands) & 9.411 & 18.083 & 0.520 & 0.603 \\
+GDP per capita$^2$ & -0.0761 & 0.1235 & -0.616 & 0.538 \\
+Population (millions) & 5.518 & 17.062 & 0.323 & 0.746 \\
+Population$^2$ & -0.0027 & 0.0069 & -0.388 & 0.698 \\
+Trade (\% GDP) & -2.019 & 4.447 & -0.454 & 0.650 \\
+Inflation & -0.0017 & 0.0047 & -0.350 & 0.726 \\
+Oil rents (\% GDP) & 5.339 & 13.912 & 0.384 & 0.701 \\
+Life expectancy & -24.297 & 45.723 & -0.531 & 0.595 \\
+Club strength & -21.309 & 40.368 & -0.528 & 0.598 \\
+\bottomrule
+\end{tabular}
+\label{tab:eq3}
+\end{table}
+
+\section{Discussion}
+The baseline results support the standard determinants of national soccer success: wealth and population have positive but diminishing impacts, while trade openness and health proxy (life expectancy) further improve outcomes. The IV model does not replicate the paper's positive club effect, largely due to weak instruments. Future work should prioritize stronger measures of club performance and improved instruments, particularly for Europe where club data are more reliable.
+
+\section{Conclusion}
+This updated replication confirms the core relationships in the baseline models, but the IV specification is weakly identified in the current dataset. Improved data on club strength and alternative instruments are necessary to revisit the endogeneity correction central to the original paper.
+
+\end{document}

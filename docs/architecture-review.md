@@ -41,6 +41,7 @@ architecture docs based on the repository's structure and contents.
 - Stata comparison
   - No coefficient-by-coefficient comparison to original paper results.
   - No documentation of numerical differences (Stata 8/9 vs Python linearmodels).
+  - Econometric report and data update plan documented in docs/econometric-report.md
 
 ### Completed ✅
 - ~~Data dictionary completion~~ - Filled with actual sources, WDI series codes, transformations
