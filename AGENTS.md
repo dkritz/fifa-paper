@@ -281,5 +281,18 @@ Verify: All cells execute without errors, outputs are deterministic
 
 ---
 
+## Tooling Notes
+
+### Posting PR comments with gh
+- Use `--body-file` with a prepared text file to avoid shell expansion issues.
+- Avoid unquoted backticks and globs like `eq*_full.csv` in inline arguments.
+- Example:
+
+```bash
+gh pr comment 6 --repo dkritz/fifa-paper --body-file .tmp/pr6-review-comment.txt
+```
+
+---
+
 *Last updated: 2026-02-03*
 *Next review: When major milestone completed*
