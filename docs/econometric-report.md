@@ -4,6 +4,8 @@ This document summarizes the current Python replication results, diagnostics, im
 
 ## Summary of Current Results (Python)
 
+Note: the end-to-end runner and actual-data notebook scale GDP per capita (thousands) and population (millions) for interpretability. Coefficients from those runs are rescaled relative to `scripts/replicate_stata.py`, which uses raw units.
+
 ### Equation (1): Baseline FE
 - GDP per capita and population have positive linear terms and negative squared terms (inverted-U), with strong statistical significance.
 - Interpretation: wealth and population increase FIFA points up to a point; marginal returns decline.

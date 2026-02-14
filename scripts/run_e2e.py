@@ -9,11 +9,16 @@ from __future__ import annotations
 
 import argparse
 import subprocess
+import sys
 from pathlib import Path
 
 import pandas as pd
-from linearmodels.iv import IV2SLS
-from linearmodels.panel import PanelOLS
+
+repo_root = Path(__file__).resolve().parent.parent
+if str(repo_root) not in sys.path:
+    sys.path.append(str(repo_root))
+
+from scripts.replicate_stata import fit_fe_iv, fit_fe_ols
 
 
 def parse_args() -> argparse.Namespace:
@@ -41,48 +46,6 @@ def build_panel_if_missing(data_path: Path) -> None:
         return
     repo_root = Path(__file__).resolve().parent.parent
     subprocess.run(["python3", "scripts/build_panel.py"], cwd=repo_root, check=True)
-
-
-def fit_fe_ols(panel: pd.DataFrame, dep: str, exog: list[str]):
-    y = panel[dep]
-    x = panel[exog]
-    model = PanelOLS(
-        y,
-        x,
-        entity_effects=True,
-        time_effects=False,
-        check_rank=False,
-        drop_absorbed=True,
-    )
-    return model.fit(cov_type="clustered", cluster_entity=True, debiased=True)
-
-
-def demean_by_entity(df: pd.DataFrame, cols: list[str], entity: str) -> pd.DataFrame:
-    out = df.copy()
-    for col in cols:
-        ent_mean = out.groupby(entity)[col].transform("mean")
-        out[col] = out[col] - ent_mean
-    return out
-
-
-def fit_fe_iv(
-    df: pd.DataFrame,
-    dep: str,
-    exog: list[str],
-    endog: str,
-    instr: list[str],
-    entity: str,
-    time: str,
-):
-    cols = [dep] + exog + [endog] + instr + [entity, time]
-    work = pd.DataFrame(df[cols].dropna().copy())
-    work = demean_by_entity(work, [dep] + exog + [endog] + instr, entity)
-    y = work[dep]
-    x = work[exog]
-    endog_v = work[endog]
-    z = work[instr]
-    model = IV2SLS(y, x, endog_v, z)
-    return model.fit(cov_type="clustered", clusters=work[entity], debiased=True)
 
 
 def save_summary(res, out_path: Path) -> None:
